@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkId             String
+  clerkId             String    @unique
   name                String
   email               String    @unique
   profileImage        String?
