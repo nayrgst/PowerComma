@@ -1,7 +1,13 @@
+'use client';
+
 import React from 'react';
+import { toast } from 'sonner';
 import { Project } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 import { Button } from '@/components/ui/button';
+import { useSlideStore } from '@/store/useSlideStore';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -9,14 +15,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { JsonValue } from '@prisma/client/runtime/library';
-import { toast } from 'sonner';
 
 type Props = {
   recentProjects: Project[];
 };
 
 const RecentOpen = ({ recentProjects }: Props) => {
+  const { setSlides } = useSlideStore();
+  const router = useRouter();
+
   function handleClick(projectId: string, slides: JsonValue) {
     if (!projectId || !slides) {
       toast.error('Nenhum Projeto Encontrado!', {
@@ -24,6 +31,9 @@ const RecentOpen = ({ recentProjects }: Props) => {
       });
       return;
     }
+
+    setSlides(JSON.parse(JSON.stringify(slides)));
+    router.push(`/presentation/${projectId}`);
   }
 
   return recentProjects.length > 0 ? (
@@ -33,7 +43,7 @@ const RecentOpen = ({ recentProjects }: Props) => {
         {recentProjects.length > 0
           ? recentProjects.map((items) => (
               <SidebarMenuItem key={items.id}>
-                <SidebarMenuButton asChild tooltip={items.title} className="hover:bg-primary-80">
+                <SidebarMenuButton asChild tooltip={items.title} className="hover:bg-primary">
                   <Button
                     onClick={() => handleClick(items.id, items.slides)}
                     variant={'link'}
