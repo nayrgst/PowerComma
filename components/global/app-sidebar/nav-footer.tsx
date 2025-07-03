@@ -30,7 +30,7 @@ const NavFooter = ({ prismaUser }: { prismaUser: User }) => {
                 <p className="text-base font-bold text-center">
                   Obter o <span className="text-violet-600">Creative AI</span>
                 </p>
-                <span className="text-sm dark:text-secondary-90">
+                <span className="text-sm">
                   Recursos avançados com inteligência artificial, disponíveis para você.
                 </span>
               </div>

@@ -34,10 +34,10 @@ export default function RootLayout({
           suppressHydrationWarning
         >
           <ThemeProvider
-            attribute={'class'}
-            defaultTheme="dark"
-            disableTransitionOnChange
+            attribute="class"
+            defaultTheme="system"
             enableSystem
+            disableTransitionOnChange
           >
             {children}
             <Toaster position="top-center" />
