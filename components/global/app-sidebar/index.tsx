@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarMenuButton,
 } from '@/components/ui/sidebar';
+import NavFooter from './nav-footer';
 
 const AppSidebar = ({
   recentProjects,
@@ -22,7 +23,7 @@ const AppSidebar = ({
 }: { recentProjects: Project[] } & { user: User } & React.ComponentProps<typeof Sidebar>) => {
   return (
     <Sidebar collapsible="icon" {...props} className="max-w-[212px] bg-background-90">
-      <SidebarHeader className="pt-6 pb-0 px-3">
+      <SidebarHeader className="pt-6 pb-0 px-2">
         <SidebarMenuButton size={'lg'} className="data-[state=open]:text-sidebar-accent-foreground">
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
             <Avatar className="size-10 rounded-full">
@@ -30,14 +31,16 @@ const AppSidebar = ({
               <AvatarFallback className="rounded-lg">PC</AvatarFallback>
             </Avatar>
           </div>
-          <span className=" text-primary text-md font-semibold p-2">Power Comma</span>
+          <span className=" text-primary text-xl font-semibold">Power Comma</span>
         </SidebarMenuButton>
       </SidebarHeader>
-      <SidebarContent className="p-3 mt-10 gap-y-6">
+      <SidebarContent className="px-2 mt-10 gap-y-6">
         <NavMain items={data.navMain} />
         <RecentOpen recentProjects={recentProjects} />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <NavFooter prismaUser={user} />
+      </SidebarFooter>
     </Sidebar>
   );
 };
