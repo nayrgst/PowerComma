@@ -61,3 +61,51 @@ export const getRecentProjects = async () => {
     return { status: 500, error: 'Interal server error!' };
   }
 };
+
+export const recoverProject = async (projectId: string) => {
+  try {
+    const checkUser = await onAuthenticateUser();
+
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: 'Usuário não autenticado!' };
+    }
+
+    const updatedProject = await client.project.update({
+      where: { id: projectId },
+      data: { isDeleted: false },
+    });
+
+    if (!updatedProject) {
+      return { status: 500, error: 'Falha ao recuperar o projeto!' };
+    }
+
+    return { status: 200, data: updatedProject };
+  } catch (error) {
+    console.log('Error:', error);
+    return { status: 500, error: 'Interal server error!' };
+  }
+};
+
+export const deleteProject = async (projectId: string) => {
+  try {
+    const checkUser = await onAuthenticateUser();
+
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: 'Usuário não autenticado!' };
+    }
+
+    const updatedProject = await client.project.update({
+      where: { id: projectId },
+      data: { isDeleted: true },
+    });
+
+    if (!updatedProject) {
+      return { status: 500, error: 'Falha ao excluir o projeto!' };
+    }
+
+    return { status: 200, data: updatedProject };
+  } catch (error) {
+    console.log('Error:', error);
+    return { status: 500, error: 'Interal server error!' };
+  }
+};
