@@ -8,8 +8,8 @@ const NotFound = () => {
 
       <div className="flex flex-col items-center justify-center text-center">
         <p className="text-3xl font-semibold text-primary">Nada para ver aqui</p>
-        <p className="text-base font-normal text-secondary">
-          Experimente criar uma imagem com o <span className="text-violet-600">Creative IA</span>
+        <p className="text-base font-normal text-ring">
+          Experimente criar com o <span className="text-violet-600">MagIA</span>
         </p>
       </div>
     </div>

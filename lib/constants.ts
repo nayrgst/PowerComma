@@ -356,3 +356,25 @@ export const themes: Theme[] = [
     type: 'dark',
   },
 ];
+
+export const CreatePageCard = [
+  {
+    title: 'Usar um',
+    highlightedText: 'Modelo',
+    description: 'Escreva um prompt e deixe o resto com a gente',
+    type: 'template',
+  },
+  {
+    title: 'Gerar com',
+    highlightedText: 'MagIA',
+    description: 'Escreva um prompt e deixe o resto com a gente',
+    type: 'MagIA',
+    highlight: true,
+  },
+  {
+    title: 'Começar do',
+    highlightedText: 'Zero',
+    description: 'Escreva um prompt e deixe o resto com a gente',
+    type: 'create-scratch',
+  },
+];

@@ -28,7 +28,7 @@ const NavFooter = ({ prismaUser }: { prismaUser: User }) => {
             <div className="flex flex-col items-start p-2 pb-3 gap-4 bg-background-80 rounded-xl ">
               <div className="flex flex-col gap-1 text-center">
                 <p className="text-base font-bold text-center">
-                  Obter o <span className="text-violet-600">Creative AI</span>
+                  Obter o <span className="text-violet-600">MagIA</span>
                 </p>
                 <span className="text-sm">
                   Recursos avançados com inteligência artificial, disponíveis para você.
