@@ -2,6 +2,7 @@
 
 import { client } from '@/lib/prisma';
 import { onAuthenticateUser } from './user';
+import { OutlineCard } from '@/lib/types';
 
 export const getAllProjects = async () => {
   try {
@@ -104,6 +105,41 @@ export const deleteProject = async (projectId: string) => {
     }
 
     return { status: 200, data: updatedProject };
+  } catch (error) {
+    console.log('Error:', error);
+    return { status: 500, error: 'Interal server error!' };
+  }
+};
+
+export const createProject = async (title: string, outlines: OutlineCard[]) => {
+  try {
+    const checkUser = await onAuthenticateUser();
+
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: 'Usuário não autenticado!' };
+    }
+
+    if (!title || !outlines || outlines.length === 0) {
+      return { status: 400, error: 'Título e itens são obrigatórios!' };
+    }
+
+    const allOutlines = outlines.map((outline) => outline.title);
+
+    const newProject = await client.project.create({
+      data: {
+        title,
+        outlines: allOutlines,
+        userId: checkUser.user.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    if (!newProject) {
+      return { status: 500, error: 'Falha ao criar o projeto!' };
+    }
+
+    return { status: 200, data: newProject };
   } catch (error) {
     console.log('Error:', error);
     return { status: 500, error: 'Interal server error!' };

@@ -9,6 +9,7 @@ type MagIAStore = {
   addOutline: (newOutline: OutlineCard) => void;
   currentAiPrompt: string;
   setCurrentAiPrompt: (prompt: string) => void;
+  resetOutlines: () => void;
 };
 
 const useMagIAStore = create<MagIAStore>()(
@@ -29,6 +30,11 @@ const useMagIAStore = create<MagIAStore>()(
       setCurrentAiPrompt: (prompt: string) => {
         set(() => ({
           currentAiPrompt: prompt,
+        }));
+      },
+      resetOutlines: () => {
+        set(() => ({
+          outlines: [],
         }));
       },
     }),

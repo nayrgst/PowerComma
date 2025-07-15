@@ -7,7 +7,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import usePromptStore from '@/store/usePromptStore';
 import CreatePage from '@/app/(protected)/(pages)/(dashboardPages)/create-page/_components/CreatePage/CreatePage';
-import MagIA from './GenerateAI/MagIA';
+import ScratchPage from '@/app/(protected)/(pages)/(dashboardPages)/create-page/_components/Scratch/ScratchPage';
+import MagIA from '@/app/(protected)/(pages)/(dashboardPages)/create-page/_components/GenerateAI/MagIA';
 
 const RenderPage = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const RenderPage = () => {
       case 'MagIA':
         return <MagIA onBack={handleBack} />;
       case 'create-scratch':
-        return <></>;
+        return <ScratchPage onBack={handleBack} />;
 
       default:
         return null;
@@ -47,7 +48,7 @@ const RenderPage = () => {
         key={page}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 1, x: -20 }}
+        exit={{ opacity: 0, x: -20 }}
         transition={{ duration: 0.3 }}
       >
         {renderStep()}

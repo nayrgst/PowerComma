@@ -1,13 +1,26 @@
 'use client';
 
-import React from 'react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { ChevronLeft } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ChevronLeft, Loader, Loader2, RotateCcw } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { containerVariants } from '@/lib/constants';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import useMagIAStore from '@/store/useMagIAStore';
+import { containerVariants } from '@/lib/constants';
+import usePromptStore from '@/store/usePromptStore';
+import { generateMagIAPrompt } from '@/actions/openia';
+import CardList from '@/app/(protected)/(pages)/(dashboardPages)/create-page/_components/Commom/CardList';
+import RecentPrompts from '@/app/(protected)/(pages)/(dashboardPages)/create-page/_components/GenerateAI/RecentPrompts';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type Props = {
   onBack: () => void;
@@ -15,10 +28,52 @@ type Props = {
 
 const MagIA = ({ onBack }: Props) => {
   const router = useRouter();
+  const [editText, setEditText] = useState('');
+  const [numOfCards, setNumOfCards] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [editingCard, setEditingCard] = useState<string | null>(null);
+  const [selectedCards, setSelectedCards] = useState<string | null>(null);
+  const {
+    currentAiPrompt,
+    setCurrentAiPrompt,
+    outlines,
+    resetOutlines,
+    addOutline,
+    addMultipleOutlines,
+  } = useMagIAStore();
+  const { prompts, addPrompt } = usePromptStore();
 
   function handleBack() {
     onBack();
   }
+
+  function resetCards() {
+    setEditingCard(null);
+    setSelectedCards(null);
+    setEditText('');
+
+    setCurrentAiPrompt('');
+    resetOutlines();
+  }
+
+  async function generateOutline() {
+    if (currentAiPrompt === '') {
+      toast.error('Erro', {
+        description: 'Por favor, digite o que você gostaria de criar!',
+      });
+      return;
+    }
+    setIsGenerating(true);
+
+    const res = await generateMagIAPrompt(currentAiPrompt);
+    // usar IA para completar essa função
+  }
+
+  function handleGenerate() {}
+
+  useEffect(() => {
+    setNumOfCards(outlines.length);
+  }, [outlines.length]);
 
   return (
     <>
@@ -37,15 +92,97 @@ const MagIA = ({ onBack }: Props) => {
           <p className="text-ring">O que você gostaria de criar hoje?</p>
         </motion.div>
 
-        <motion.div className="bgprimary/10 rounded-xl p-4">
+        <motion.div className="bg-primary/10 rounded-xl p-4">
           <div className="flex flex-col justify-between  items-center rounded-xl gap-3 sm:flex-row">
             <Input
               placeholder="Digite o que você gostaria de criar..."
-              className="text-base p-5 border-0 focus-visible:ring-0 shadow-none bg-transparent grow md:p-7"
+              className="text-base p-0 sm:text-xl border-0 focus-visible:ring-0 shadow-none !bg-transparent grow-0"
+              value={currentAiPrompt}
+              onChange={(e) => setCurrentAiPrompt(e.target.value)}
               required
             />
+
+            <div className="flex items-center gap-3">
+              <Select
+                value={numOfCards.toString()}
+                onValueChange={(value) => setNumOfCards(parseInt(value))}
+              >
+                <SelectTrigger className="w-fit font-semibold shadow-xl gap-2">
+                  <SelectValue placeholder="Escolha o número de itens" />
+                </SelectTrigger>
+
+                <SelectContent className="w-fit">
+                  {outlines.length === 0 ? (
+                    <SelectItem value="0" className="font-semibold">
+                      Sem itens
+                    </SelectItem>
+                  ) : (
+                    Array.from({ length: outlines.length }, (_, idx) => idx + 1).map((num) => (
+                      <SelectItem value={num.toString()} key={num} className="font-semibold">
+                        {num} {num === 1 ? 'item' : 'itens'}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+
+              <Button
+                variant={'destructive'}
+                aria-label="reseta os itens"
+                size={'icon'}
+                onClick={resetCards}
+              >
+                <RotateCcw className="size-4" />
+              </Button>
+            </div>
           </div>
         </motion.div>
+        <div className="flex w-full justify-center items-center">
+          <Button
+            className="flex items-center font-medium text-lg gap-2"
+            onClick={generateOutline}
+            disabled={isGenerating}
+          >
+            {isGenerating ? (
+              <>
+                <Loader className="animate-spin mr-2" />
+              </>
+            ) : (
+              'Gerar Conteúdo'
+            )}
+          </Button>
+        </div>
+
+        <CardList
+          outlines={outlines}
+          addOutline={addOutline}
+          addMultipleOutlines={addMultipleOutlines}
+          editingCard={editingCard}
+          selectedCards={selectedCards}
+          editText={editText}
+          onEditChange={setEditText}
+          onCardSelect={setEditingCard}
+          setSelectedCards={setSelectedCards}
+          setEditText={setEditText}
+          setEditingCard={setEditingCard}
+          onCardDoubleClick={(id, title) => {
+            setEditingCard(id);
+            setEditText(title);
+          }}
+        />
+
+        {outlines.length > 0 && (
+          <Button className="w-full" onClick={handleGenerate} disabled={isGenerating}>
+            {isGenerating ? (
+              <>
+                <Loader2 className="animate-spin mr-2" /> Gerando...
+              </>
+            ) : (
+              'Gerar'
+            )}
+          </Button>
+        )}
+        {prompts.length > 0 && <RecentPrompts />}
       </motion.div>
     </>
   );
