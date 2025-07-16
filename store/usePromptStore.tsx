@@ -16,7 +16,7 @@ type PromptStore = {
   page: Page;
   setPage: (page: Page) => void;
   prompts: Prompt[] | [];
-  setPrompts: (prompt: Prompt[]) => void;
+  setPrompts: (prompt: Prompt) => void;
   removePrompt?: (id: string) => void;
 };
 
@@ -29,9 +29,9 @@ const usePromptStore = create<PromptStore>()(
           set({ page });
         },
         prompts: [],
-        setPrompts: (prompt: Prompt[]) => {
+        setPrompts: (prompt: Prompt) => {
           set((state) => ({
-            prompts: [...state.prompts, ...prompt],
+            prompts: [prompt, ...state.prompts],
           }));
         },
         removePrompt: (id: string) => {

@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Loader, Loader2, RotateCcw } from 'lucide-react';
+import { ChevronLeft, Loader2, RotateCcw } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { OutlineCard } from '@/lib/types';
+import { v4 as uuidv4 } from 'uuid';
+import { createProject } from '@/actions/project';
+import { useSlideStore } from '@/store/useSlideStore';
 
 type Props = {
   onBack: () => void;
@@ -28,6 +32,7 @@ type Props = {
 
 const MagIA = ({ onBack }: Props) => {
   const router = useRouter();
+  const { setProject } = useSlideStore();
   const [editText, setEditText] = useState('');
   const [numOfCards, setNumOfCards] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -41,7 +46,7 @@ const MagIA = ({ onBack }: Props) => {
     addOutline,
     addMultipleOutlines,
   } = useMagIAStore();
-  const { prompts, addPrompt } = usePromptStore();
+  const { prompts, setPrompts } = usePromptStore();
 
   function handleBack() {
     onBack();
@@ -51,7 +56,6 @@ const MagIA = ({ onBack }: Props) => {
     setEditingCard(null);
     setSelectedCards(null);
     setEditText('');
-
     setCurrentAiPrompt('');
     resetOutlines();
   }
@@ -66,10 +70,73 @@ const MagIA = ({ onBack }: Props) => {
     setIsGenerating(true);
 
     const res = await generateMagIAPrompt(currentAiPrompt);
-    // usar IA para completar essa função
+    if (res.status === 200 && res?.data?.outlines) {
+      const cardsData: OutlineCard[] = [];
+      res.data?.outlines.map((outline: string, idx: number) => {
+        const newCard = {
+          id: uuidv4(),
+          title: outline,
+          order: idx + 1,
+        };
+        cardsData.push(newCard);
+      });
+      addMultipleOutlines(cardsData);
+      setNumOfCards(cardsData.length);
+      toast.success('Sucesso!', {
+        description: 'Esboço gerado com sucesso!',
+      });
+    } else {
+      toast.error('Erro!', {
+        description: 'Não foi possível gerar o esboço! Tente novamente.',
+      });
+    }
+    setIsGenerating(false);
   }
 
-  function handleGenerate() {}
+  async function handleGenerate() {
+    setIsGenerating(true);
+    try {
+      if (outlines.length === 0) {
+        toast.error('Erro!', {
+          description: 'Por favor, gere um esboço primeiro. Clique no botão "Gerar Esboço" abaixo.',
+        });
+        return;
+      }
+
+      const res = await createProject(currentAiPrompt, outlines.slice(0, numOfCards));
+
+      if (res.status !== 200 || !res.data) {
+        toast.error('Erro!', {
+          description: 'Impossível gerar o projeto! Tente novamente.',
+        });
+        return;
+      }
+
+      router.push(`/presentation/${res.data.id}/select-theme`);
+      setProject(res.data);
+      setPrompts({
+        id: uuidv4(),
+        title: currentAiPrompt || outlines?.[0].title,
+        outlines: outlines,
+        createdAt: new Date().toISOString(),
+      });
+
+      toast.success('Sucesso!', {
+        description: 'Projeto gerado com sucesso!',
+      });
+      setIsGenerating(false);
+      setCurrentAiPrompt('');
+      resetOutlines();
+    } catch (error) {
+      console.log(error);
+
+      toast.error('Erro!', {
+        description: 'Impossível gerar o projeto! Tente novamente.',
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  }
 
   useEffect(() => {
     setNumOfCards(outlines.length);
@@ -145,10 +212,10 @@ const MagIA = ({ onBack }: Props) => {
           >
             {isGenerating ? (
               <>
-                <Loader className="animate-spin mr-2" />
+                <Loader2 className="animate-spin mr-2" />
               </>
             ) : (
-              'Gerar Conteúdo'
+              'Gerar Esboço'
             )}
           </Button>
         </div>
@@ -161,7 +228,11 @@ const MagIA = ({ onBack }: Props) => {
           selectedCards={selectedCards}
           editText={editText}
           onEditChange={setEditText}
-          onCardSelect={setEditingCard}
+          onCardSelect={(id) => {
+            setEditingCard(id);
+            const card = outlines.find((c) => c.id === id);
+            setEditText(card?.title || '');
+          }}
           setSelectedCards={setSelectedCards}
           setEditText={setEditText}
           setEditingCard={setEditingCard}

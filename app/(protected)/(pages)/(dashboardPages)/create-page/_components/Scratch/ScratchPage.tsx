@@ -149,7 +149,11 @@ const ScratchPage = ({ onBack }: Props) => {
           selectedCards={selectedCards}
           editText={editText}
           onEditChange={setEditText}
-          onCardSelect={setEditingCard}
+          onCardSelect={(id) => {
+            setEditingCard(id);
+            const card = outlines.find((c) => c.id === id);
+            setEditText(card?.title || '');
+          }}
           setSelectedCards={setSelectedCards}
           setEditText={setEditText}
           setEditingCard={setEditingCard}
