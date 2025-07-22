@@ -212,7 +212,7 @@ const MagIA = ({ onBack }: Props) => {
           >
             {isGenerating ? (
               <>
-                <Loader2 className="animate-spin mr-2" />
+                <Loader2 className="animate-spin size-5" />
               </>
             ) : (
               'Gerar Esboço'
@@ -246,7 +246,7 @@ const MagIA = ({ onBack }: Props) => {
           <Button className="w-full" onClick={handleGenerate} disabled={isGenerating}>
             {isGenerating ? (
               <>
-                <Loader2 className="animate-spin mr-2" /> Gerando...
+                <Loader2 className="animate-spin" /> Gerando...
               </>
             ) : (
               'Gerar'

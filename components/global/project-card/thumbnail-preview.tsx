@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Slide, Theme } from '@/lib/types';
 
 type Props = {
-  slide: Slide;
+  slide: Slide | null;
   theme: Theme;
 };
 
