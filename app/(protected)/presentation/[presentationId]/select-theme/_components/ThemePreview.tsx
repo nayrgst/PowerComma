@@ -46,7 +46,7 @@ const ThemePreview = () => {
         </ol>
       </div>
       <Button
-        className="w-full h-12 text-lg font-medium transition-opacity hover:opacity-80"
+        className="w-full h-12 text-lg font-medium transition-opacity"
         style={{
           backgroundColor: selectedTheme.accentColor,
           color: selectedTheme.fontColor,
@@ -75,7 +75,7 @@ const ThemePreview = () => {
         </ul>
       </div>
       <Button
-        className="w-full h-12 text-lg font-medium transition-opacity hover:opacity-80"
+        className="w-full h-12 text-lg font-medium transition-opacity"
         variant={'outline'}
         style={{ borderColor: selectedTheme.accentColor, color: selectedTheme.fontColor }}
       >
@@ -99,7 +99,7 @@ const ThemePreview = () => {
       </div>
       <div className="flex flex-wrap gap-3">
         <Button
-          className="h-12 text-lg font-medium transition-opacity hover:opacity-80"
+          className="h-12 text-lg font-medium transition-opacity"
           style={{ backgroundColor: selectedTheme.accentColor, color: selectedTheme.fontColor }}
         >
           Botão principal
@@ -107,7 +107,7 @@ const ThemePreview = () => {
 
         <Button
           variant="outline"
-          className="h-12 text-lg font-medium transition-opacity hover:opacity-80"
+          className="h-12 text-lg font-medium transition-opacity"
           style={{ borderColor: selectedTheme.accentColor, color: selectedTheme.fontColor }}
         >
           Botão secundário
