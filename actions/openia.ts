@@ -455,7 +455,7 @@ export const generateMagIAPrompt = async (userPrompt: string) => {
 
   try {
     const completion = await openAi.chat.completions.create({
-      model: 'gpt-4o-2024-11-20',
+      model: 'gemini-2.0-flash-001',
       messages: [
         {
           role: 'system',
@@ -607,7 +607,7 @@ const getLayoutsByJSON = async (outlineArray: string[]) => {
     console.log('gerando layouts');
 
     const complition = await openAi.chat.completions.create({
-      model: 'gpt-4o-2024-11-20',
+      model: 'gemini-2.0-flash-001',
       messages: [
         {
           role: 'system',
