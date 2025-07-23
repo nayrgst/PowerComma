@@ -42,16 +42,16 @@ const ThemePicker = ({ selectedTheme, onThemeSelect }: Props) => {
 
     try {
       const res = await generateLayouts(params.presentationId as string, currentTheme.name);
+      console.log(res);
       if (res?.status !== 200 && !res?.data) {
         toast.error('Erro', {
           description: 'Erro ao gerar layouts!',
         });
         return;
-      } else {
-        toast.success('Sucesso', {
-          description: 'Layouts gerados com sucesso!',
-        });
       }
+      toast.success('Sucesso', {
+        description: 'Layouts gerados com sucesso!',
+      });
 
       router.push(`/presentation/${project.id}`);
       setSlides(res?.data);
@@ -114,7 +114,7 @@ const ThemePicker = ({ selectedTheme, onThemeSelect }: Props) => {
               key={theme.name}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mx-2"
+              className="mx-1"
             >
               <Button
                 onClick={() => onThemeSelect(theme)}

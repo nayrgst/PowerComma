@@ -116,7 +116,7 @@ const ProjectCard = ({ createAt, projectId, slideData, title, isDelete, themeNam
 
       <div className="w-full">
         <div className="space-y-1">
-          <h3 className="text-primary font-semibold text-base line-clamp-1">{title} Titulo</h3>
+          <h3 className="text-primary font-semibold text-base line-clamp-1">{title}</h3>
           <div className="w-full flex justify-between gap-2 items-center">
             <p className="text-sm text-muted-foreground" suppressHydrationWarning>
               {timeAgo(createAt)}

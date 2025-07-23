@@ -9,10 +9,12 @@ import { redirect, useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import Navbar from '@/app/(protected)/presentation/[presentationId]/_components/navbar/Navbar';
+import LayoutPreview from '@/app/(protected)/presentation/[presentationId]/_components/editor-sidebar/left-sidebar/LayoutPreview';
+import Editor from '@/app/(protected)/presentation/[presentationId]/_components/editor/Editor';
 
-type Props = {};
-
-const PresentationIdPage = (props: Props) => {
+const PresentationIdPage = () => {
   //WIP: criar a visualização da apresentação
 
   const params = useParams();
@@ -53,7 +55,27 @@ const PresentationIdPage = (props: Props) => {
     </div>;
   }
 
-  return <DndProvider></DndProvider>;
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex flex-col min-h-screen">
+        <Navbar presentationId={params.presentationId as string} />
+
+        <div
+          className="flex flex-1 overflow-hidden pt-16"
+          style={{
+            backgroundColor: currentTheme.backgroundColor,
+            fontFamily: currentTheme.fontFamily,
+            color: currentTheme.accentColor,
+          }}
+        >
+          <LayoutPreview />
+          <div className="flex-1 ml-64 pr-16">
+            <Editor isEditable={true} />
+          </div>
+        </div>
+      </div>
+    </DndProvider>
+  );
 };
 
 export default PresentationIdPage;

@@ -7,7 +7,8 @@ import OpenAI from 'openai';
 import { v4 as uuidv4 } from 'uuid';
 
 const openAi = new OpenAI({
-  apiKey: process.env.GOOGLE_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
 });
 
 const existingLayouts = [
@@ -428,11 +429,6 @@ const existingLayouts = [
 ];
 
 export const generateMagIAPrompt = async (userPrompt: string) => {
-  const openAi = new OpenAI({
-    apiKey: process.env.GOOGLE_API_KEY,
-    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-  });
-
   const finalPrompt = `
   Crie um esboço coerente e relevante para o seguinte prompt: ${userPrompt}.
   O esboço deve consistir de pelo menos 6 pontos, com cada ponto escrito como uma única frase.
@@ -455,7 +451,7 @@ export const generateMagIAPrompt = async (userPrompt: string) => {
 
   try {
     const completion = await openAi.chat.completions.create({
-      model: 'gemini-2.0-flash-001',
+      model: 'gemini-2.0-flash',
       messages: [
         {
           role: 'system',
@@ -607,7 +603,7 @@ const getLayoutsByJSON = async (outlineArray: string[]) => {
     console.log('gerando layouts');
 
     const complition = await openAi.chat.completions.create({
-      model: 'gemini-2.0-flash-001',
+      model: 'gemini-2.0-flash',
       messages: [
         {
           role: 'system',
@@ -624,6 +620,7 @@ const getLayoutsByJSON = async (outlineArray: string[]) => {
       return { status: 400, error: 'Não foi possível gerar os layouts' };
     }
 
+    console.log('responseContent:', responseContent);
     let jsonReponse;
     try {
       jsonReponse = JSON.parse(responseContent.replace(/```json\n|```/g, ''));
@@ -678,8 +675,8 @@ export const generateLayouts = async (projectId: string, theme: string) => {
       return { status: 404, error: 'Projeto não encontrado!' };
     }
 
-    if (project.outlines && project.outlines.length > 0) {
-      return { status: 400, error: 'Projeto já possui esboços!' };
+    if (project.outlines && project.outlines.length === 0) {
+      return { status: 400, error: 'Projeto não possui esboços!' };
     }
 
     const layouts = await getLayoutsByJSON(project.outlines);

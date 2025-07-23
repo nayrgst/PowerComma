@@ -43,7 +43,7 @@ const RecentOpen = ({ recentProjects }: Props) => {
         {recentProjects.length > 0
           ? recentProjects.map((items) => (
               <SidebarMenuItem key={items.id}>
-                <SidebarMenuButton asChild tooltip={items.title} className="hover:bg-primary">
+                <SidebarMenuButton asChild tooltip={items.title}>
                   <Button
                     onClick={() => handleClick(items.id, items.slides)}
                     variant={'link'}
