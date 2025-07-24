@@ -14,8 +14,9 @@ export interface ContentItem {
   content: ContentItem[] | string | string[] | string[][];
   initialRows?: number;
   initialColumns?: number;
+  restrictToDrop?: boolean;
   columns?: number;
-  planeholder?: string;
+  placeholder?: string;
   className?: string;
   alt?: string;
   callOutType?: 'success' | 'warning' | 'info' | 'question' | 'caution';
