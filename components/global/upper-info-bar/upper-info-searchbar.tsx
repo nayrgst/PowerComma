@@ -7,7 +7,7 @@ const SearchBar = () => {
   return (
     <div className="flex min-w-[60%] relative items-center border rounded-full">
       <Button
-        className="absolute left-0 z-10 h-full rounded-r-none bg-transparent hover:bg-transparent rounded-full"
+        className="absolute left-0 z-10 h-full rounded-r-none !bg-transparent hover:!bg-transparent rounded-full"
         variant={'ghost'}
         type="submit"
         size={'sm'}
@@ -18,7 +18,7 @@ const SearchBar = () => {
       <Input
         type="text"
         placeholder="Procure por um título"
-        className="w-full bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-4 rounded-full"
+        className="w-full !bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-4 rounded-full"
       />
     </div>
   );

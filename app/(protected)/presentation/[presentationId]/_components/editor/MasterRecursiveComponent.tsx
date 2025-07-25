@@ -12,6 +12,9 @@ import {
 } from '@/components/global/editor/components/Heading';
 import { cn } from '@/lib/utils';
 import DropZone from '@/app/(protected)/presentation/[presentationId]/_components/editor/DropZone';
+import Paragraph from '@/components/global/editor/components/Paragraph';
+import Table from '@/components/global/editor/components/Table';
+import Column from '@/components/global/editor/components/Column';
 
 type MasterRecursiveComponentProps = {
   content: ContentItem;
@@ -51,18 +54,21 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
             <Heading1 {...commomProps} />
           </motion.div>
         );
+
       case 'heading2':
         return (
           <motion.div className="size-full" {...animationProps}>
             <Heading2 {...commomProps} />
           </motion.div>
         );
+
       case 'heading3':
         return (
           <motion.div className="size-full" {...animationProps}>
             <Heading3 {...commomProps} />
           </motion.div>
         );
+
       case 'heading4':
         return (
           <motion.div className="size-full" {...animationProps}>
@@ -76,6 +82,51 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
             <Title {...commomProps} />
           </motion.div>
         );
+
+      case 'paragraph':
+        return (
+          <motion.div className="size-full" {...animationProps}>
+            <Paragraph {...commomProps} />
+          </motion.div>
+        );
+
+      case 'table':
+        // Garante que content.content seja sempre string[][]
+        const tableContent =
+          Array.isArray(content.content) && Array.isArray((content.content as unknown[])[0])
+            ? (content.content as string[][])
+            : [[]];
+        return (
+          <motion.div className="size-full" {...animationProps}>
+            <Table
+              content={tableContent}
+              onChange={(newContent) =>
+                onContentChange(content.id, newContent !== null ? newContent : '')
+              }
+              initialRowSize={content.initialColumns}
+              initialColSize={content.initialRows}
+              isPreview={isPreview}
+              isEditable={isEditable}
+            />
+          </motion.div>
+        );
+
+      case 'resizable-column':
+        if (Array.isArray(content.content)) {
+          return (
+            <motion.div {...animationProps} className="w-full h-full">
+              <Column
+                content={content.content as ContentItem[]}
+                className={content.className}
+                onContentChange={onContentChange}
+                slideId={slideId}
+                isPreview={isPreview}
+                isEditable={isEditable}
+              />
+            </motion.div>
+          );
+        }
+        return null;
 
       case 'column':
         if (Array.isArray(content.content)) {
