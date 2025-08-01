@@ -54,35 +54,41 @@ const Table = ({
   }, [tableData]);
 
   if (isPreview) {
-    <div className="w-full overflow-x-auto text-xs">
-      <table className="w-full">
-        <thead>
-          <tr>
-            {tableData[0].map((cell, index) => (
-              <th key={index} className="p-2 border" style={{ width: `${colSizes[index]}%` }}>
-                {cell || 'Escreva aqui...'}
-              </th>
-            ))}
-          </tr>
+    return (
+      <div className="w-full overflow-x-auto text-xs p-2">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              {tableData[0].map((cell, index) => (
+                <th
+                  key={index}
+                  className="p-1 sm:p-2 border text-left"
+                  style={{ width: `${colSizes[index]}%` }}
+                >
+                  {cell || 'Escreva aqui...'}
+                </th>
+              ))}
+            </tr>
+          </thead>
           <tbody>
             {tableData.slice(1).map((row, rowIndex) => (
               <tr key={rowIndex} style={{ width: `${rowSizes[rowIndex + 1]}%` }}>
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="p-2 border">
+                  <td key={cellIndex} className="p-1 sm:p-2 border">
                     {cell || 'Escreva aqui...'}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
-        </thead>
-      </table>
-    </div>;
+        </table>
+      </div>
+    );
   }
 
   return (
     <div
-      className="size-full relative"
+      className="size-full relative p-2"
       style={{
         background: currentTheme.gradientBackground || currentTheme.backgroundColor,
         borderRadius: '8px',
@@ -119,11 +125,11 @@ const Table = ({
                     onResize={(size) => handleResizeCol(colIndex, size)}
                     className="size-full min-h-9"
                   >
-                    <div className="size-full relative min-h-3">
+                    <div className="size-full relative min-h-3 p-1">
                       <input
                         value={cell}
                         onChange={(e) => updateCell(rowIndex, colIndex, e.target.value)}
-                        className="w-full h-full p-4 !bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
+                        className="w-full h-full p-2 sm:p-4 !bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md text-sm sm:text-base"
                         style={{
                           color: currentTheme.fontColor,
                         }}

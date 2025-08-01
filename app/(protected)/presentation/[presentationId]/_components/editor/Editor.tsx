@@ -114,7 +114,7 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
       }}
       onClick={() => setCurrentSlide(index)}
     >
-      <div className="size-full flex-grow overflow-hidden">
+      <div className="size-full flex-grow overflow-hidden p-6 sm:p-8">
         <MasterRecursiveComponent
           content={slide.content}
           isEditable={isEditable}

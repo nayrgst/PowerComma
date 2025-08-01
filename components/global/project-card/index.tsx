@@ -58,13 +58,15 @@ const ProjectCard = ({ createAt, projectId, slideData, title, isDelete, themeNam
       route.refresh();
 
       toast.success('Sucesso!', {
-        description: 'Projeto recuperar do com sucesso.',
+        description: 'Projeto recuperado com sucesso.',
       });
     } catch (error) {
       console.log(error);
       toast.error('Oopss!', {
         description: 'Algo deu errado! Por favor entre em contato com o suporte.',
       });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -90,20 +92,22 @@ const ProjectCard = ({ createAt, projectId, slideData, title, isDelete, themeNam
       route.refresh();
 
       toast.success('Sucesso!', {
-        description: 'Projeto excluído do com sucesso.',
+        description: 'Projeto excluído com sucesso.',
       });
     } catch (error) {
       console.log(error);
       toast.error('Oopss!', {
         description: 'Algo deu errado! Por favor entre em contato com o suporte.',
       });
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <motion.div
       variants={ItemVariants}
-      className={`w-full group flex flex-col gap-y-3 rounded-xl p-3 transition-colors ${
+      className={`w-full group flex flex-col gap-y-2 sm:gap-y-3 rounded-xl p-2 sm:p-3 transition-colors ${
         !isDelete && 'hover:bg-muted/50'
       }`}
     >
@@ -115,15 +119,15 @@ const ProjectCard = ({ createAt, projectId, slideData, title, isDelete, themeNam
       </div>
 
       <div className="w-full">
-        <div className="space-y-1">
-          <h3 className="text-primary font-semibold text-base line-clamp-1">{title}</h3>
+        <div className="space-y-1 sm:space-y-2">
+          <h3 className="text-primary font-semibold text-sm sm:text-base line-clamp-1">{title}</h3>
           <div className="w-full flex justify-between gap-2 items-center">
-            <p className="text-sm text-muted-foreground" suppressHydrationWarning>
+            <p className="text-xs sm:text-sm text-muted-foreground" suppressHydrationWarning>
               {timeAgo(createAt)}
             </p>
             {isDelete ? (
               <AlertDialogBox
-                description="Isso vai recuperará seu projeto e restaurará seus dados."
+                description="Isso vai recuperar seu projeto e restaurar seus dados."
                 className="bg-green-500 hover:bg-green-600 dark:bg-green-600 hover:dark:bg-green-700"
                 loading={loading}
                 open={open}
@@ -133,7 +137,7 @@ const ProjectCard = ({ createAt, projectId, slideData, title, isDelete, themeNam
                 <Button
                   size={'sm'}
                   variant={'ghost'}
-                  className="bg-primary-10 hover:bg-secondary cursor-pointer"
+                  className="bg-primary-10 hover:bg-secondary cursor-pointer text-xs sm:text-sm h-7 sm:h-8"
                   disabled={loading}
                 >
                   Recuperar
@@ -150,7 +154,7 @@ const ProjectCard = ({ createAt, projectId, slideData, title, isDelete, themeNam
                 <Button
                   size={'sm'}
                   variant={'ghost'}
-                  className="bg-primary-10 hover:bg-secondary cursor-pointer"
+                  className="bg-primary-10 hover:bg-secondary cursor-pointer text-xs sm:text-sm h-7 sm:h-8"
                   disabled={loading}
                 >
                   Deletar

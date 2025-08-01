@@ -53,7 +53,7 @@ const Column = ({
         {columns.map((item, index) => (
           <React.Fragment key={item.id}>
             <ResizablePanel minSize={20} defaultSize={100 / columns.length}>
-              <div className={cn('size-full', item.className)}>
+              <div className={cn('size-full p-2 sm:p-4', item.className)}>
                 <MasterRecursiveComponent
                   content={item}
                   isPreview={isPreview}

@@ -15,6 +15,7 @@ import DropZone from '@/app/(protected)/presentation/[presentationId]/_component
 import Paragraph from '@/components/global/editor/components/Paragraph';
 import Table from '@/components/global/editor/components/Table';
 import Column from '@/components/global/editor/components/Column';
+import ImageComponent from '@/components/global/editor/components/ImageComponent';
 
 type MasterRecursiveComponentProps = {
   content: ContentItem;
@@ -50,42 +51,60 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
     switch (content.type) {
       case 'heading1':
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Heading1 {...commomProps} />
           </motion.div>
         );
 
       case 'heading2':
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Heading2 {...commomProps} />
           </motion.div>
         );
 
       case 'heading3':
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Heading3 {...commomProps} />
           </motion.div>
         );
 
       case 'heading4':
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Heading4 {...commomProps} />
           </motion.div>
         );
 
       case 'title':
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Title {...commomProps} />
           </motion.div>
         );
 
       case 'paragraph':
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Paragraph {...commomProps} />
           </motion.div>
         );
@@ -97,7 +116,10 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
             ? (content.content as string[][])
             : [[]];
         return (
-          <motion.div className="size-full" {...animationProps}>
+          <motion.div
+            className={cn('size-full flex flex-col', content.className)}
+            {...animationProps}
+          >
             <Table
               content={tableContent}
               onChange={(newContent) =>
@@ -128,12 +150,39 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
         }
         return null;
 
+      case 'image':
+        return (
+          <motion.div
+            {...animationProps}
+            className={cn('size-full flex flex-col', content.className)}
+          >
+            <ImageComponent
+              src={content.content as string}
+              alt={content.alt || 'image'}
+              className={content.className}
+              isPreview={isPreview}
+              contentId={content.id}
+              onContentChange={onContentChange}
+              isEditable={isEditable}
+            />
+          </motion.div>
+        );
+
+      case 'blockquote':
+        return (
+          <motion.div
+            {...animationProps}
+            className={cn('size-full flex flex-col', content.className)}
+          >
+            <BlockQuote></BlockQuote>
+          </motion.div>
+        );
       case 'column':
         if (Array.isArray(content.content)) {
           return (
             <motion.div
               {...animationProps}
-              className={cn('size-full flex flex-col', content.className)}
+              className={cn('size-full flex flex-col p-2 sm:p-3', content.className)}
             >
               {content.content.length > 0 ? (
                 (content.content as ContentItem[]).map((subItem, subIndex) => (
